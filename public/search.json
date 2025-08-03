@@ -1,9 +1,44 @@
 [
   {
-    "title": "Sample Blog Post",
-    "url": "/blog/sample-post",
-    "date": "2024-01-15",
-    "excerpt": "This is a sample blog post to demonstrate the theme's capabilities.",
-    "categories": ["Design", "Web Development"]
+    "title": "NHANES Age Prediction: Summer Analytics 2025 Hackathon Experience",
+    "url": "/blog/nhanes-age-prediction",
+    "date": "2025-07-12",
+    "excerpt": "Participating in the Summer Analytics Hackathon 2025 to classify adult vs senior age groups using NHANES health survey data.",
+    "categories": ["Data Science", "Machine Learning"]
+  },
+  {
+    "title": "Taming Noisy Satellite Data: My Kaggle Journey with NDVI Land Cover Classification",
+    "url": "/blog/taming-noisy-satellite-data",
+    "date": "2025-07-13",
+    "excerpt": "A beginner’s guide to building a machine learning pipeline for NDVI time-series data to classify land cover types in a Kaggle hackathon.",
+    "categories": ["Data Science", "Machine Learning"]
+  },
+  {
+    "title": "Personal Portfolio Website with Astro",
+    "url": "/blog/personal-portfolio-astro",
+    "date": "2025-07-20",
+    "excerpt": "Designed and developed a modern portfolio website using Astro.js, focusing on performance and clean design principles.",
+    "categories": ["Portfolio", "Web Development"]
+  },
+  {
+    "title": "Flappy Bird — Java Swing Edition",
+    "url": "/blog/flappy-bird-java-swing",
+    "date": "2025-07-27",
+    "excerpt": "A simple recreation of Flappy Bird using Java Swing, demonstrating animation, collision detection, and GUI rendering.",
+    "categories": ["Portfolio", "Game Development"]
+  },
+  {
+    "title": "Dynamic Pricing for Urban Parking Lots",
+    "url": "/blog/dynamic-pricing-urban-parking",
+    "date": "2025-07-27",
+    "excerpt": "Intelligent dynamic pricing engine for urban parking lots, adjusting rates in real-time based on demand, traffic, and competitor prices.",
+    "categories": ["Portfolio", "Data Science"]
+  },
+  {
+    "title": "Animemāketto - Anime Merchandise E-commerce Website",
+    "url": "/blog/animemaketto-anime-ecommerce",
+    "date": "2025-07-27",
+    "excerpt": "An online platform for purchasing anime-related merchandise, featuring a modern UI, shopping cart, and user authentication.",
+    "categories": ["Portfolio", "Web Development"]
   }
 ]

@@ -1,0 +1,87 @@
+---
+title: "NHANES Age Prediction: Summer Analytics 2025 Hackathon Experience"
+date: "2025-07-12"
+---
+
+# NHANES Age Prediction 🧠📊
+
+In July 2025, I participated in the **Summer Analytics Hackathon** hosted by IIT Guwahati on AI Planet. The challenge was to predict whether a person belonged to the **Adult (below 60)** or **Senior (60+)** age group based on health and nutritional survey data from the **NHANES dataset**.
+
+---
+
+## 🏆 Hackathon Highlights
+
+- **Hackathon Name**: Summer Analytics 2025  
+- **Organized By**: Consulting and Analytics Club, IIT Guwahati  
+- **Dataset**: NHANES (National Health and Nutrition Examination Survey)  
+- **Goal**: Classify individuals into *Adult* or *Senior* age groups.  
+- **Leaderboard Ranks**:  
+  - **Private leaderboard**: 176 / 220  
+  - **Public leaderboard**: 160 / 236  
+
+---
+
+## 🧑‍💻 My Approach
+
+### 📝 Data Preprocessing
+- Cleaned missing values using **mean imputation**.  
+- Converted categorical columns (e.g., Gender, Diabetes indicator) to numerical form.  
+- Removed rows where the **target variable** was missing.
+
+### 🛠 Feature Engineering
+- Created interaction features like:  
+  - `BMI x Glucose` → to capture relationships between obesity & glucose levels.  
+  - `BMI x Insulin` → to model insulin resistance tendencies.  
+
+### 🤖 Models Tried
+- **Baseline**: Logistic Regression.  
+- **Advanced Models**:  
+  - Random Forest (F1 ~30%)  
+  - XGBoost (F1 ~35%)  
+  - Stacking Ensemble (F1 ~37%)  
+
+<div style={{backgroundColor: '#111213ff', padding: '10px', borderRadius: '8px'}}>
+  🚀 The Stacking model combined XGBoost, Random Forest, and Logistic Regression to improve overall performance.
+</div>
+
+---
+
+## 📈 Results
+
+| Model               | F1 Score |
+|----------------------|----------|
+| Logistic Regression  | 18%      |
+| Random Forest        | 30%      |
+| XGBoost              | 35%      |
+| **Stacking Ensemble**| **37%**  |
+
+📊 *Top features (via XGBoost importance)*:  
+- `BMI`  
+- `Glucose level`  
+- `Insulin level`  
+- Interaction features like `BMI x Glucose`.  
+
+---
+
+## 💡 Key Learnings
+
+✅ Handling **imbalanced classes** using `class_weight` and `scale_pos_weight`.  
+✅ Importance of **feature engineering** in tabular data.  
+✅ How stacking can combine weak learners into a stronger predictor.  
+
+---
+
+## 📜 Takeaways
+
+This hackathon was a great hands-on experience in **healthcare analytics**. It taught me how to handle **real-world datasets** with missing values and imbalances and boosted my skills in **ensemble learning**.
+
+<div style={{backgroundColor: '#0e0d0dff', padding: '10px', borderRadius: '8px'}}>
+  🌟 *“Achieved top 50% rank in a national-level hackathon by building an XGBoost-based age prediction model with advanced feature engineering and stacking ensemble techniques.”*
+</div>
+
+---
+
+## 🖇 Related Links
+- [NHANES Dataset Info](https://www.cdc.gov/nchs/nhanes/index.htm)  
+- [Summer Analytics Hackathon on AI Planet](https://aiplanet.com/profile/Chirayu%20Khalwa)
+

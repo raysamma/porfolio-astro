@@ -12,19 +12,20 @@ export async function getStaticPaths() {
   const allPosts = [...Object.values(mdPostsGlob), ...Object.values(mdxPostsGlob)] as any[];
   
   return allPosts.map((post: any) => {
-    // For import.meta.glob, access raw content through compiledContent or body
     const rawContent = post.body || post.rawContent?.() || '';
     const plainText = extractTextFromMarkdown(rawContent);
     const readingTime = calculateReadingTime(plainText);
     const allHeadings = extractHeadings(rawContent);
     const tocHeadings = filterHeadingsForTOC(allHeadings);
     
+    // THE FIX IS THIS LINE:
     return {
-      params: { slug: post.file.split('/').pop()?.replace(/\.(md|mdx)$/, '') },
+      params: { slug: post.frontmatter.slug },
       props: { post, readingTime, tocHeadings }
     };
   });
 }
+
 
 const { post, readingTime, tocHeadings } = Astro.props;
 const { frontmatter, Content } = post as any;

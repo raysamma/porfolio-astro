@@ -1,0 +1,145 @@
+---
+import Layout from '../components/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all blog posts with category "Portfolio" or tag "project"
+const allPosts = await getCollection('blog', (post) => {
+  const isPortfolio = post.data.categories?.includes('Portfolio');
+  const isProject = post.data.tags?.includes('project');
+  return isPortfolio || isProject;
+});
+
+// Sort posts by date
+const sortedProjects = allPosts.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<Layout title="Projects" description="My Portfolio Projects">
+  <div class="projects-page">
+    <header class="page-header">
+      <h1>Projects</h1>
+      <p class="subtitle">A showcase of my data science and development work</p>
+    </header>
+
+    <div class="projects-grid">
+      {sortedProjects.map((project) => (
+        <article class="project-card">
+          {project.data.image && (
+            <div class="project-image">
+              <img src={project.data.image} alt={project.data.title} />
+            </div>
+          )}
+          <div class="project-content">
+            <h2 class="project-title">
+              <a href={`/blog/${project.slug}`}>{project.data.title}</a>
+            </h2>
+            {project.data.excerpt && (
+              <p class="project-excerpt">{project.data.excerpt}</p>
+            )}
+            <div class="project-tags">
+              {project.data.tags?.map((tag) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .projects-page {
+    padding: var(--content-padding);
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .subtitle {
+    color: var(--color-text-secondary);
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .project-card {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s;
+    background: var(--color-surface);
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .project-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border: none;
+    margin: 0;
+  }
+
+  .project-content {
+    padding: 1.5rem;
+  }
+
+  .project-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+  }
+
+  .project-title a {
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+
+  .project-title a:hover {
+    color: var(--color-accent);
+  }
+
+  .project-excerpt {
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    background: var(--color-surface);
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: 16px;
+    padding: 0.25em 0.75em;
+    font-size: 0.95em;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: background 0.2s, color 0.2s;
+    margin-bottom: 0.25em;
+  }
+  .tag:hover {
+    background: var(--color-accent);
+    color: var(--color-white);
+  }
+</style>

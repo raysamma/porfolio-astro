@@ -17,18 +17,18 @@ export interface SiteConfig {
 }
 
 export const config: SiteConfig = {
-  title: "Volks-Typo",
-  description: "A blog exploring the intersection of design, typography, and history",
+  title: "Chirayu Khalwa Portfolio",
+  description: "Personal blog and project showcase by Chirayu Khalwa, B.Tech CSE Final Year",
   author: {
-    name: "Your Name",
-    bio: "Writer, designer, and explorer of aesthetic tensions between past and present.",
-    // avatar: "/images/avatar.jpg" // Uncomment and add your avatar image to public/images/
+    name: "Chirayu Khalwa",
+    bio: "Coder, Editor, and explorer of aesthetic tensions between past and present.",
+    avatar: "/images/IMG20250709121326 (1).jpg" // Uncomment and add your avatar image to public/images/
   },
   social: {
-    github: "https://github.com/yourusername",
-    twitter: "https://twitter.com/yourusername",
-    linkedin: "https://linkedin.com/in/yourusername",
-    email: "your.email@example.com"
+    github: "https://github.com/raysamma",
+    twitter: "https://twitter.com/ChirayuKhalwa",
+    linkedin: "https://linkedin.com/in/ChirayuKhalwa",
+    email: "khalwachirayu@gmail.com"
   },
   siteUrl: "https://volks-typo.example.com"
 };

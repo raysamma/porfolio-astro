@@ -1,0 +1,77 @@
+---
+title: "Personal Portfolio Website with Astro"
+date: "2025-07-20"
+author: "Your Name"
+excerpt: "Designed and developed a modern portfolio website using Astro.js, focusing on performance and clean design principles."
+categories: ["Portfolio", "Web Development"]
+tags: ["project", "astro", "typescript", "web-design"]
+image: "/images/portfolio-website.jpg"
+---
+
+# Building My Portfolio with Astro 🚀
+
+A deep dive into how I built this portfolio website using Astro.js, focusing on performance, accessibility, and modern design principles.
+
+## 🎯 Project Goals
+
+- **Fast Loading**: Sub-second page loads
+- **Clean Design**: Typography-focused layout
+- **Easy Updates**: MDX for content management
+- **Dark Mode**: Automatic theme switching
+
+## 🛠️ Tech Stack
+
+- Astro.js
+- TypeScript
+- MDX
+- CSS Custom Properties
+- Markdown
+
+## ✨ Key Features
+
+### Performance Optimization
+```typescript
+// Pre-render all pages at build time
+export const prerender = true;
+
+// Optimize images with Astro's built-in Image component
+import { Image } from 'astro:assets';
+```
+
+### Dynamic Theme Switching
+```typescript
+// Theme toggle functionality
+const theme = localStorage.getItem('theme') ?? 'light';
+document.documentElement.dataset.theme = theme;
+```
+
+### MDX Content Management
+```markdown
+---
+title: "Blog Post"
+date: "2025-07-20"
+---
+
+# Write in Markdown
+With **rich** formatting!
+```
+
+## 📊 Performance Metrics
+
+- **Lighthouse Score**: 100
+- **First Paint**: 0.8s
+- **TTI**: 1.2s
+- **Bundle Size**: 52KB
+
+## 🎨 Design Decisions
+
+- Typography-first approach
+- Minimalist color palette
+- Focused content presentation
+- Responsive grid layouts
+
+## 🔗 Links
+
+- [Source Code](#)
+- [Design Files](#)
+- [Live Site](#)

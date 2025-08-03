@@ -1,0 +1,77 @@
+---
+title: "Flappy Bird — Java Swing Edition"
+slug: "flappy-bird-java-swing"
+date: "2025-07-27"
+author: "Your Name"
+excerpt: "A simple recreation of Flappy Bird using Java Swing, demonstrating animation, collision detection, and GUI rendering."
+categories: ["Portfolio", "Game Development"]
+tags: ["project", "java", "swing", "game"]
+image: "/images/flappybird.png"
+---
+
+
+# Flappy Bird — Java Swing Edition
+
+A simple recreation of the classic Flappy Bird game using Java Swing. This project demonstrates fundamental game development concepts like animation, collision detection, event handling, and GUI rendering.
+
+## 🖥️ Preview
+
+2D game window with a bird flapping between pipes while the player tries to avoid hitting them.
+
+## 📂 Project Structure
+
+```
+/flappy-bird
+├── App.java               // Main game launcher class
+├── FlappyBird.java        // Game logic, rendering, and user interaction
+├── flappybird.png         // Bird sprite
+├── flappybirdbg.png       // Background image
+├── toppipe.png            // Top pipe image
+└── bottompipe.png         // Bottom pipe image
+```
+
+## 🚀 Getting Started
+
+**Requirements**
+- JDK 8 or later
+- Any Java IDE (Eclipse, IntelliJ, VS Code) or terminal
+
+**How to Run**
+```sh
+javac App.java FlappyBird.java
+java App
+```
+Make sure all the image files are placed in the same directory as your .java files or adjust the getResource(...) paths accordingly.
+
+## 🎮 Game Controls
+
+- SPACEBAR → Makes the bird flap (jump upward).
+- If the bird hits a pipe or falls off the screen, Game Over is displayed.
+- Press SPACEBAR again to restart after a game over.
+
+## 🧠 Key Concepts Used
+
+- **Java Swing GUI**: JFrame & JPanel for rendering the game window, ImageIcon for loading images, KeyListener for detecting user input.
+- **Game Loop**: javax.swing.Timer runs at ~60 FPS (1000/60 ms interval), Pipe generation every 1500 ms.
+- **Object-Oriented Design**: Bird and Pipe classes are defined as inner classes for structure and encapsulation.
+- **Collision Detection**: Simple rectangular bounding box logic:
+  ```
+  a.x < b.x + b.width &&
+  a.x + a.width > b.x &&
+  a.y < b.y + b.height &&
+  a.y + a.height > b.y
+  ```
+
+
+
+## 📌 TODO / Improvements
+
+- Add sound effects
+- Add start/pause menus
+- Optimize image loading
+- Track high scores
+- Mobile compatibility with JavaFX
+
+## 🔗 Project Link
+
+[GitHub Repository](https://github.com/raysamma/flappy-bird)

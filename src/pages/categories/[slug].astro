@@ -2,38 +2,30 @@
 import Layout from '../../components/Layout.astro';
 
 export async function getStaticPaths() {
-  const postsGlob = import.meta.glob('../../content/blog/*.md', { eager: true });
+  const postsGlob = import.meta.glob('../../content/blog/*.{md,mdx}', { eager: true });
   const allPosts = Object.values(postsGlob) as any[];
-  
-  // Extract all unique categories
-  const allCategories = new Set<string>();
-  allPosts.forEach((post: any) => {
+
+  const allCategories = new Set<string>(); // <--- FIXED
+  allPosts.forEach(post => {
     if (post.frontmatter.categories) {
-      post.frontmatter.categories.forEach((category: string) => {
-        allCategories.add(category);
-      });
+      post.frontmatter.categories.forEach((category: string) => allCategories.add(category));
     }
   });
 
-  // Create paths for each category
   return Array.from(allCategories).map((category: string) => {
-    const categorySlug = category.toLowerCase().replace(/[\/\s]+/g, '-');
-    const postsInCategory = allPosts.filter((post: any) => 
+    const slug = category.toLowerCase().replace(/[\/\s]+/g, '-');
+    const postsInCategory = allPosts.filter(post =>
       post.frontmatter.categories && post.frontmatter.categories.includes(category)
-    ).sort((a: any, b: any) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime());
-
+    );
     return {
-      params: { category: categorySlug },
-      props: {
-        category,
-        posts: postsInCategory
-      }
+      params: { slug }, // <--- must match [slug].astro!
+      props: { category, posts: postsInCategory }
     };
   });
 }
 
+
 const { category, posts } = Astro.props;
-const base = import.meta.env.BASE_URL;
 ---
 
 <Layout title={`${category} - Volks-Typo`} description={`All posts in the ${category} category`}>
@@ -46,15 +38,17 @@ const base = import.meta.env.BASE_URL;
       <hr class="page-rule" />
     </header>
 
-    <div class="posts-list">
-      {posts.map((post: any) => (
-        <article class="post-item">
+    <div class="posts-grid">
+      {posts.map(post => (
+        <article class="post-card">
           <h2 class="post-title">
-            <a href={`${base}blog/${post.file.split('/').pop()?.replace('.md', '')}`}>
+            <a href={`/blog/${post.file.split('/').pop()?.replace(/\.(md|mdx)$/, '')}`}>
               {post.frontmatter.title}
             </a>
           </h2>
-          
+          {post.frontmatter.excerpt && (
+            <p class="post-excerpt">{post.frontmatter.excerpt}</p>
+          )}
           <div class="post-meta">
             <time class="post-date" datetime={post.frontmatter.date}>
               {new Date(post.frontmatter.date).toLocaleDateString('en-US', {
@@ -63,24 +57,21 @@ const base = import.meta.env.BASE_URL;
                 day: 'numeric'
               })}
             </time>
+            <a href={`/blog/${post.file.split('/').pop()?.replace(/\.(md|mdx)$/, '')}`} class="read-more">
+              Read More →
+            </a>
           </div>
-          
-          {post.frontmatter.excerpt && (
-            <p class="post-excerpt">{post.frontmatter.excerpt}</p>
-          )}
-          
-          <a href={`${base}blog/${post.file.split('/').pop()?.replace('.md', '')}`} class="read-more">
-            Read More →
-          </a>
         </article>
       ))}
     </div>
 
     <div class="page-navigation">
-      <a href={`${base}categories`} class="back-link">← Back to All Categories</a>
+      <a href={`/categories`} class="back-link">← Back to All Categories</a>
     </div>
   </div>
 </Layout>
+
+
 
 <style>
   .category-page {
@@ -224,4 +215,82 @@ const base = import.meta.env.BASE_URL;
       font-size: 1.75rem;
     }
   }
+  .posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.post-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.post-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+}
+
+.post-title {
+  font-family: var(--font-heading-secondary);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+}
+
+.post-title a {
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.post-title a:hover,
+.post-title a:focus {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.post-excerpt {
+  color: var(--color-text-secondary);
+  font-size: 1.05rem;
+  margin-bottom: 1.3rem;
+  line-height: 1.6;
+}
+
+.post-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  margin-top: auto;
+}
+
+.post-date {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+.read-more {
+  font-family: var(--font-heading-secondary);
+  font-weight: 700;
+  color: var(--color-accent);
+  text-decoration: none;
+  margin-left: 1rem;
+  text-transform: uppercase;
+  font-size: 0.95em;
+}
+
+.read-more:hover,
+.read-more:focus {
+  color: var(--color-text-primary);
+}
+
 </style>

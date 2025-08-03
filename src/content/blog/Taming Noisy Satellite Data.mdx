@@ -1,0 +1,111 @@
+---
+title: "Taming Noisy Satellite Data: My Kaggle Journey with NDVI Land Cover Classification"
+slug: "taming-noisy-satellite-data"
+date: "2025-07-13"
+author: "Your Name"
+excerpt: "A beginner’s guide to building a machine learning pipeline for NDVI time-series data to classify land cover types in a Kaggle hackathon."
+categories: ["Data Science", "Machine Learning"]
+tags: ["kaggle", "ndvi", "logistic regression", "random forest", "feature engineering"]
+image: "/images/ndvi-hackathon.jpg"
+draft: false
+---
+
+# Taming Noisy Satellite Data: My Kaggle Journey with NDVI Land Cover Classification 🌱
+
+In Summer Analytics 2025, I participated in a Kaggle hackathon hosted by CAC IIT Guwahati and GeeksforGeeks. The challenge? Classify land cover types (like water, forest, urban areas) using **NDVI time-series data** from satellite imagery and OpenStreetMap labels.  
+
+As a beginner in Kaggle competitions, this hackathon taught me valuable lessons about **data cleaning**, **feature engineering**, and **model generalization**. Here's how I approached it:  
+
+---
+
+## 🛰️ The Problem  
+
+Each sample had 27 NDVI readings over time, often with missing or noisy values due to clouds or crowdsourced label errors. The goal was to predict the correct class:  
+
+- 🌊 Water  
+- 🏙️ Impervious (urban areas)  
+- 🌾 Farm  
+- 🌳 Forest  
+- 🍃 Grass  
+- 🍎 Orchard  
+
+Two leaderboards existed:  
+- **Public leaderboard:** Noisy data (89% test set).  
+- **Private leaderboard:** Clean data (11% test set, used for final ranking).  
+
+My ranks:  
+- 📈 Public Rank: **#666 / 1395 (47%)**  
+- 🏆 Private Rank: **#446 / 1395 (32%)**
+
+---
+
+## 🧹 Tackling Noisy Data  
+
+The dataset had:  
+✅ **Missing values** due to cloud cover  
+✅ **Seasonal variations** in vegetation  
+✅ **Noisy labels** from OpenStreetMap  
+
+I used:  
+- **Mean Imputation**: To fill missing NDVI values  
+- **Statistical Smoothing**: Extracted mean, standard deviation, skewness, and trend to reduce noise sensitivity  
+
+---
+
+## 🔥 Feature Engineering  
+
+To make the model robust, I engineered new features:  
+
+| Feature          | Why?                                    |
+|-------------------|------------------------------------------|
+| Mean              |  Average vegetation over time            |
+| Standard Deviation|  Variation in vegetation health          |
+| Trend             |  Seasonal growth or decline              |
+| Skewness          |  Asymmetry in vegetation signals         |
+| Kurtosis          |  Detect outliers (e.g., sudden changes)  |
+
+These features transformed raw time-series data into meaningful summaries.  
+
+---
+
+## 🤖 Modeling  
+
+- Started with **Logistic Regression (Multiclass)** for a simple baseline  
+- Improved with **Random Forest Classifier** to handle noisy, non-linear patterns  
+- Scaled features using `StandardScaler` for better convergence  
+
+---
+
+## 📊 Results  
+
+| Model               | Cross-Validation Accuracy | Private Rank Improvement |
+|----------------------|----------------------------|---------------------------|
+| Logistic Regression  | ~86%                       | -                         |
+| Random Forest        | ~88%                       | Improved by 220 places    |
+
+---
+
+## 🎯 What I Learned  
+
+✅ How to clean and preprocess noisy real-world satellite data  
+✅ The power of feature engineering in improving model performance  
+✅ Why generalization matters more than overfitting to public leaderboards  
+
+---
+
+## 🌟 Final Thoughts  
+
+This Kaggle hackathon gave me hands-on experience with real-world data challenges. As a beginner, it taught me how to think like a data scientist: from cleaning messy data to building robust models.  
+
+👨‍💻 **Next Steps**: Try time-series models (like LSTMs or XGBoost) and explore spatial data visualization.  
+
+---
+## 🏆 Proof of Participation
+
+Here are my ranks in the Kaggle hackathon:  
+
+📊 **Public Leaderboard Rank:** #666 / 1395 (~47%)  
+📊 **Private Leaderboard Rank:** #446 / 1395 (~32%)  
+
+
+
