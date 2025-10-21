@@ -225,8 +225,3 @@ hr {
   border: 0;
 }
 /* This rule will apply only to screens 768px wide or smaller */
-@media (max-width: 768px) {
-  .your-sidebar-class {
-    display: none;
-  }
-}
