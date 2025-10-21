@@ -37,7 +37,7 @@ const sortedPosts = pureBlogs
         {sortedPosts.map((post: any) => (
           <article class="post-item">
             <h2 class="post-title">
-              <a href={`/blog/${post.frontmatter.slug}/`}>
+              <a href={`${base}/blog/${post.frontmatter.slug}/`}>
   {post.frontmatter.title}
 </a>
 
@@ -67,7 +67,7 @@ const sortedPosts = pureBlogs
               <p class="post-excerpt">{post.frontmatter.excerpt}</p>
             )}
             
-            <a href={`/blog/${post.frontmatter.slug}/`} class="read-more">
+            <a href={`${base}/blog/${post.frontmatter.slug}/`} class="read-more">
   Read More →
 </a>
 

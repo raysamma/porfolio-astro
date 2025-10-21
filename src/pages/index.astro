@@ -1,6 +1,6 @@
 ---
 import Layout from '../components/Layout.astro';
-
+const base = import.meta.env.BASE_URL;
 const mdPostsGlob = import.meta.glob('../content/blog/*.md', { eager: true });
 const mdxPostsGlob = import.meta.glob('../content/blog/*.mdx', { eager: true });
 const allPosts = [...Object.values(mdPostsGlob), ...Object.values(mdxPostsGlob)] as any[];
@@ -60,7 +60,7 @@ const sortedBlogs = [...blogPosts]
             {sortedProjects.map(project => (
               <article class="demo-post-card">
                 <h3 class="demo-post-title">
-                  <a href={`/blog/${project.frontmatter.slug}/`}>
+                  <a href={`${base}/blog/${project.frontmatter.slug}/`}>
   {project.frontmatter.title}
 </a>
 
@@ -90,7 +90,7 @@ const sortedBlogs = [...blogPosts]
           </div>
         )}
         <div class="demo-actions">
-          <a href="/categories/portfolio" class="btn btn-primary">All Projects</a>
+          <a href={`${base}/categories/portfolio`} class="btn btn-primary">All Projects</a>
         </div>
       </div>
     </section>
@@ -107,7 +107,7 @@ const sortedBlogs = [...blogPosts]
             {sortedBlogs.map(blog => (
               <article class="demo-post-card">
                 <h3 class="demo-post-title">
-                  <a href={`/blog/${blog.frontmatter.slug}/`}>
+                  <a href={`${base}/blog/${blog.frontmatter.slug}/`}>
   {blog.frontmatter.title}
 </a>
 
@@ -137,7 +137,7 @@ const sortedBlogs = [...blogPosts]
           </div>
         )}
         <div class="demo-actions">
-          <a href="/blog" class="btn btn-primary">All Blogs</a>
+          <a href={`${base}/blog`} class="btn btn-primary">All Blogs</a>
         </div>
       </div>
     </section>
