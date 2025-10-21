@@ -26,11 +26,10 @@ const base = import.meta.env.BASE_URL;
       <nav class="main-navigation" role="navigation" aria-label="Main navigation">
         <ul class="nav-list">
           <li><a href={base} class="nav-link">Home</a></li>
-          <li><a href={base + "blog"} class="nav-link">Blog</a></li>
-           <li><a href={base + "categories"} class="nav-link">Categories</a></li>
-          <li><a href={base + "projects"} class="nav-link">Projects</a></li>
-          <li><a href={base + "about"} class="nav-link">About</a></li>
-          <li>
+          <li><a href={`${base}/blog`} class="nav-link">Blog</a></li>
+          <li><a href={`${base}/categories`} class="nav-link">Categories</a></li>
+          <li><a href={`${base}/projects`} class="nav-link">Projects</a></li>
+          <li><a href={`${base}/about`} class="nav-link">About</a></li>
             <a href="/Chirayu_Khalwa_Resume.pdf" download class="resume-icon-button" aria-label="Download Resume" title="Download Resume">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M4 15V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
