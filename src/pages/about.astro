@@ -1,37 +1,32 @@
 ---
 import Layout from '../components/Layout.astro';
 import { config } from '../config';
+import IconLeetCode from '../components/icons/IconLeetCode.astro';
+import IconKaggle from '../components/icons/IconKaggle.astro';
+import AnimateStagger from '../components/AnimateStagger.astro';
 
 const { title, description, author, social } = config;
-const pageDescription = `Learn more about ${author.name} and the ${title} blog`;
+const pageDescription = `Learn more about ${author.name}, a software developer and creative technologist.`;
 ---
 
 <Layout title={`About | ${title}`} description={pageDescription}>
   <div class="about-page">
-    <header class="page-header">
-      <h1 class="page-title">About</h1>
+    <header class="page-header fade-in-stagger">
+      <h1 class="page-title">About Me</h1>
       <hr class="page-rule" />
     </header>
 
-    <div class="author-section">
+    <div class="author-section fade-in-stagger">
       <div class="author-avatar">
         {author.avatar ? (
           <img src={author.avatar} alt={author.name} />
         ) : (
           <div class="avatar-placeholder">
             <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Circular mask to contain the silhouette -->
-              <defs>
-                <clipPath id="circleClip">
-                  <circle cx="40" cy="40" r="39" />
-                </clipPath>
-              </defs>
+              <defs><clipPath id="circleClip"><circle cx="40" cy="40" r="39" /></clipPath></defs>
               <g clip-path="url(#circleClip)">
-                <!-- Head (oval shape) -->
                 <ellipse cx="40" cy="28" rx="13" ry="15" fill="currentColor"/>
-                <!-- Neck -->
                 <path d="M33 40 Q33 44 35 46 L45 46 Q47 44 47 40 Z" fill="currentColor"/>
-                <!-- Shoulders -->
                 <path d="M35 46 Q28 48 22 54 Q16 60 14 70 L14 80 L66 80 L66 70 Q64 60 58 54 Q52 48 45 46 Z" fill="currentColor"/>
               </g>
             </svg>
@@ -42,238 +37,86 @@ const pageDescription = `Learn more about ${author.name} and the ${title} blog`;
       <p class="author-bio">{author.bio}</p>
       
       <div class="social-links">
-        {social.github && (
-          <a href={social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-            </svg>
-          </a>
-        )}
-        {social.twitter && (
-          <a href={social.twitter} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
-            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-          </a>
-        )}
-        {social.linkedin && (
-          <a href={social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-          </a>
-        )}
-        {social.email && (
-          <a href={`mailto:${social.email}`} aria-label="Email">
-            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/>
-              <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/>
-            </svg>
-          </a>
-        )}
+        {social.github && <a href={social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a>}
+        {social.leetcode && <a href={social.leetcode} target="_blank" rel="noopener noreferrer" aria-label="LeetCode" title="LeetCode"><IconLeetCode class="social-icon" /></a>}
+        {social.kaggle && <a href={social.kaggle} target="_blank" rel="noopener noreferrer" aria-label="Kaggle" title="Kaggle"><IconKaggle class="social-icon" /></a>}
+        {social.twitter && <a href={social.twitter} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>}
+        {social.instagram && <a href={social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>}
+        {social.linkedin && <a href={social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>}
+        {social.email && <a href={`mailto:${social.email}`} aria-label="Email"><svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></a>}
       </div>
     </div>
 
-    <div class="content-section">
-      <h2>About This Blog</h2>
-      <p>{description}</p>
-      
-      <h2>Design Philosophy</h2>
-      <p>
-        Volks-Typo explores the fascinating intersection between Bauhaus modernism and 
-        bold typography. This theme creates a minimalist aesthetic that is 
-        visually striking, functional, and conceptually rich.
-      </p>
-
-      <h2>Core Principles</h2>
+    <div class="content-section fade-in-stagger">
+      <h2>My Story</h2>
+      <p>My journey into technology began with a fascination for pixelated games and the intricate logic of Data Structures & Algorithms. But it was my 10th Standard computer teacher who truly ignited my desire to build. They showed me that code wasn't just about solving problems, but about creating new worlds and entire experiences from a blank screen. That inspiration set me on the path to becoming a software engineer, and I've been enthusiastically building ever since.</p>
+      <h2>My Skills</h2>
+      <p>I focus on building robust and scalable applications. Here are the technologies I work with:</p>
       <ul>
-        <li><strong>Bold Typography</strong>: Strong typographic hierarchy with uppercase headings</li>
-        <li><strong>Minimalism as a Base</strong>: Clean, uncluttered aesthetic with generous white space</li>
-        <li><strong>Geometric Structure</strong>: Consistent 8-point grid system for layout harmony</li>
-        <li><strong>High Contrast</strong>: Clear visual separation between elements</li>
+        <li><strong>Languages:</strong> Java, Python, SQL (T-SQL, MySQL)</li>
+        <li><strong>Web Development:</strong> Astro.js, JavaScript, HTML/CSS</li>
+        <li><strong>Tools & Design:</strong> Git, Figma, SQL Server Management Studio</li>
       </ul>
+      <h2>Beyond the Code</h2>
+      <p>When I'm not coding, I'm often behind a camera. My passion for video production—from cinematography and vlogging to editing and VFX—gives me a unique perspective on storytelling and user experience. It has taught me the importance of pacing, detail, and crafting a final product that captivates its audience—principles I bring to every software project I tackle.</p>
+      <h2>Let's Connect</h2>
+      <p>I am currently seeking a full-time <strong>Software Development Engineer (SDE)</strong> role where I can contribute to meaningful projects and grow within a talented team. I am also open to discussing interesting <strong>freelance opportunities</strong>. If you believe I would be a good fit, I would love to hear from you.</p>
+      <p>Please feel free to <a href={`mailto:${social.email}`}>send me an email</a> or connect with me on <a href={social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
+      
+      <div class="colophon">
+        <p>✨ This portfolio was built by Chirayu Khalwa with the creative and technical assistance of <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">Google's Gemini</a>.</p>
+      </div>
     </div>
   </div>
+
+  <AnimateStagger />
 </Layout>
 
 <style>
-  .about-page {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .page-header {
+  /* All your existing styles remain the same */
+  .about-page { max-width: 800px; margin: 0 auto; }
+  .page-header { text-align: center; margin-bottom: calc(var(--grid-unit) * 6); }
+  .page-title { font-family: var(--font-heading-primary); font-size: 3.5rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.15em; line-height: 1.1; margin-bottom: calc(var(--grid-unit) * 4); }
+  .page-rule { height: 4px; background-color: var(--color-accent); border: none; width: 120px; margin: 0 auto; }
+  .author-section { text-align: center; margin-bottom: calc(var(--grid-unit) * 10); padding: calc(var(--grid-unit) * 6) calc(var(--grid-unit) * 4); background-color: var(--color-surface); border-radius: calc(var(--grid-unit)); }
+  .author-avatar { margin-bottom: calc(var(--grid-unit) * 3); }
+  .author-avatar img { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 4px solid var(--color-accent); }
+  .avatar-placeholder { width: 160px; height: 160px; border-radius: 50%; border: 4px solid var(--color-accent); background-color: var(--color-surface); display: flex; align-items: center; justify-content: center; color: var(--color-medium-gray); margin: 0 auto; }
+  .author-name { font-family: var(--font-heading-secondary); font-size: 2.5rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: calc(var(--grid-unit) * 2); }
+  .author-bio { font-size: 1.25rem; line-height: 1.6; color: var(--color-text-secondary); max-width: 600px; margin: 0 auto calc(var(--grid-unit) * 4); }
+  .social-links { display: flex; gap: calc(var(--grid-unit) * 3); justify-content: center; align-items: center; }
+  .social-links a { color: var(--color-text-secondary); transition: color 0.2s ease, transform 0.2s ease; }
+  .social-links a:hover { color: var(--color-accent); transform: translateY(-2px); }
+  .social-icon { width: 28px; height: 28px; }
+  .content-section { line-height: 1.7; }
+  .content-section h2 { font-family: var(--font-heading-secondary); font-size: 1.875rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.1em; margin-top: calc(var(--grid-unit) * 6); margin-bottom: calc(var(--grid-unit) * 3); }
+  .content-section p { font-size: 1.125rem; line-height: 1.6; color: var(--color-text-primary); margin-bottom: calc(var(--grid-unit) * 3); }
+  .content-section ul { margin: calc(var(--grid-unit) * 2) 0; padding-left: calc(var(--grid-unit) * 3); }
+  .content-section li { margin-bottom: calc(var(--grid-unit) * 2); font-size: 1.125rem; line-height: 1.6; }
+  .content-section strong { color: var(--color-text-primary); }
+  
+  .colophon {
+    margin-top: calc(var(--grid-unit) * 8);
+    padding-top: calc(var(--grid-unit) * 2);
+    border-top: 1px solid var(--color-border);
     text-align: center;
-    margin-bottom: calc(var(--grid-unit) * 6);
   }
-
-  .page-title {
-    font-family: var(--font-heading-primary);
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: var(--color-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    line-height: 1.1;
-    margin-bottom: calc(var(--grid-unit) * 4);
+  .colophon p {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
   }
-
-  .page-rule {
-    height: 4px;
-    background-color: var(--color-accent);
-    border: none;
-    width: 120px;
-    margin: 0 auto;
-  }
-
-  .author-section {
-    text-align: center;
-    margin-bottom: calc(var(--grid-unit) * 10);
-    padding: calc(var(--grid-unit) * 6) calc(var(--grid-unit) * 4);
-    background-color: var(--color-surface);
-    border-radius: calc(var(--grid-unit));
-  }
-
-  .author-avatar {
-    margin-bottom: calc(var(--grid-unit) * 3);
-  }
-
-  .author-avatar img {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid var(--color-accent);
-  }
-
-  .avatar-placeholder {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    border: 4px solid var(--color-accent);
-    background-color: var(--color-surface);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-medium-gray);
-    margin: 0 auto;
-  }
-
-  .author-name {
-    font-family: var(--font-heading-secondary);
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--color-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: calc(var(--grid-unit) * 2);
-  }
-
-  .author-bio {
-    font-size: 1.25rem;
-    line-height: 1.6;
-    color: var(--color-text-secondary);
-    max-width: 600px;
-    margin: 0 auto calc(var(--grid-unit) * 4);
-  }
-
-  .social-links {
-    display: flex;
-    gap: calc(var(--grid-unit) * 3);
-    justify-content: center;
-    align-items: center;
-  }
-
-  .social-links a {
-    color: var(--color-text-secondary);
-    transition: color 0.2s ease, transform 0.2s ease;
-  }
-
-  .social-links a:hover {
-    color: var(--color-accent);
-    transform: translateY(-2px);
-  }
-
-  .social-icon {
-    width: 28px;
-    height: 28px;
-  }
-
-  .content-section {
-    line-height: 1.7;
-  }
-
-  .content-section h2 {
-    font-family: var(--font-heading-secondary);
-    font-size: 1.875rem;
-    font-weight: 700;
-    color: var(--color-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: calc(var(--grid-unit) * 6);
-    margin-bottom: calc(var(--grid-unit) * 3);
-  }
-
-  .content-section p {
-    font-size: 1.125rem;
-    line-height: 1.6;
-    color: var(--color-text-primary);
-    margin-bottom: calc(var(--grid-unit) * 3);
-  }
-
-  .content-section ul {
-    margin: calc(var(--grid-unit) * 2) 0;
-    padding-left: calc(var(--grid-unit) * 3);
-  }
-
-  .content-section li {
-    margin-bottom: calc(var(--grid-unit) * 2);
-    font-size: 1.125rem;
-    line-height: 1.6;
-  }
-
-  .content-section strong {
-    color: var(--color-text-primary);
-  }
-
+  
   @media (max-width: 768px) {
-    .page-title {
-      font-size: 2.5rem;
-    }
-
-    .author-section {
-      padding: calc(var(--grid-unit) * 4) calc(var(--grid-unit) * 3);
-    }
-
-    .author-name {
-      font-size: 2rem;
-    }
-
-    .author-bio {
-      font-size: 1.125rem;
-    }
-
-    .author-avatar img {
-      width: 120px;
-      height: 120px;
-    }
-
-    .avatar-placeholder {
-      width: 120px;
-      height: 120px;
-    }
-
-    .social-links {
-      gap: calc(var(--grid-unit) * 2);
-    }
-
-    .content-section h2 {
-      font-size: 1.5rem;
-    }
-
-    .content-section p,
-    .content-section li {
-      font-size: 1rem;
-    }
+    .page-title { font-size: 2.5rem; }
+    .author-section { padding: calc(var(--grid-unit) * 4) calc(var(--grid-unit) * 3); }
+    .author-name { font-size: 2rem; }
+    .author-bio { font-size: 1.125rem; }
+    .author-avatar img { width: 120px; height: 120px; }
+    .avatar-placeholder { width: 120px; height: 120px; }
+    .social-links { gap: calc(var(--grid-unit) * 2); }
+    .content-section h2 { font-size: 1.5rem; }
+    .content-section p, .content-section li { font-size: 1rem; }
   }
 </style>

@@ -237,9 +237,10 @@ const categories = [...new Set(allPosts.flatMap((post: any) => post.frontmatter.
     border-color: var(--color-accent);
   }
 
-  @media (max-width: 1023px) {
-    .sidebar-content {
-      margin-bottom: calc(var(--grid-unit) * 3);
-    }
+ /* AFTER */
+@media (max-width: 1023px) {
+  .sidebar-content {
+    display: none; /* <-- Add this line to hide the sidebar */
   }
+}
 </style>

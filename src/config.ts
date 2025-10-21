@@ -12,6 +12,8 @@ export interface SiteConfig {
     instagram?: string;
     linkedin?: string;
     email?: string;
+    leetcode?: string; // Add this
+    kaggle?: string;  
   };
   siteUrl: string;
 }
@@ -25,10 +27,13 @@ export const config: SiteConfig = {
     avatar: "/images/IMG20250709121326 (1).jpg" // Uncomment and add your avatar image to public/images/
   },
   social: {
+    instagram:"https://www.instagram.com/alpha_sagaxx/",
     github: "https://github.com/raysamma",
     twitter: "https://twitter.com/ChirayuKhalwa",
     linkedin: "https://linkedin.com/in/ChirayuKhalwa",
-    email: "khalwachirayu@gmail.com"
+    email: "khalwachirayu@gmail.com",
+    leetcode: "https://leetcode.com/u/raysamma/",
+    kaggle: "https://www.kaggle.com/ChirayuKhalwa"
   },
   siteUrl: "https://volks-typo.example.com"
 };

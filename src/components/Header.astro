@@ -30,6 +30,14 @@ const { base = '' } = Astro.site ? { base: import.meta.env.BASE_URL } : { base: 
            <li><a href={base + "categories"} class="nav-link">Categories</a></li>
           <li><a href={base + "projects"} class="nav-link">Projects</a></li>
           <li><a href={base + "about"} class="nav-link">About</a></li>
+          <li>
+            <a href="/Chirayu_Khalwa_Resume.pdf" download class="resume-icon-button" aria-label="Download Resume" title="Download Resume">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 15V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 4V14M12 14L8 10M12 14L16 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </li>
         </ul>
       </nav>
       
@@ -44,14 +52,14 @@ const { base = '' } = Astro.site ? { base: import.meta.env.BASE_URL } : { base: 
 </a>
 
         
-        <a href={base + "rss.xml"} class="rss-toggle" title="RSS Feed">
+        <!-- <a href={base + "rss.xml"} class="rss-toggle" title="RSS Feed">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="5" cy="19" r="2" fill="currentColor"/>
             <path d="M3 3v2c8.284 0 15 6.716 15 15h2c0-9.389-7.611-17-17-17z" fill="currentColor"/>
             <path d="M3 9v2c4.963 0 9 4.037 9 9h2c0-6.065-4.935-11-11-11z" fill="currentColor"/>
           </svg>
           <span class="visually-hidden">RSS</span>
-        </a>
+        </a> -->
         
         <button class="search-toggle" id="search-toggle" aria-label="Search articles">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -67,9 +75,15 @@ const { base = '' } = Astro.site ? { base: import.meta.env.BASE_URL } : { base: 
 <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation">
   <ul class="mobile-nav-list">
     <li><a href={base} class="mobile-nav-link">Home</a></li>
+    <li><a href={base + "projects"} class="mobile-nav-link">Projects</a></li>
     <li><a href={base + "blog"} class="mobile-nav-link">Blog</a></li>
     <li><a href={base + "categories"} class="mobile-nav-link">Categories</a></li>
     <li><a href={base + "about"} class="mobile-nav-link">About</a></li>
+    <li>
+      <a href="/Chirayu_Khalwa_Resume.pdf" download class="mobile-nav-link">
+        Download Resume
+      </a>
+    </li>
   </ul>
 </nav>
 
@@ -693,9 +707,9 @@ const { base = '' } = Astro.site ? { base: import.meta.env.BASE_URL } : { base: 
 
     .header-content {
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      grid-template-columns: 44px 1fr 160px; /* Fixed sizes to prevent overlap */
       align-items: center;
-      gap: calc(var(--grid-unit) * 2);
+      gap: calc(var(--grid-unit) * 1);
       padding: 0 calc(var(--grid-unit) * 2);
     }
 
@@ -709,22 +723,27 @@ const { base = '' } = Astro.site ? { base: import.meta.env.BASE_URL } : { base: 
       justify-self: center;
       text-align: center;
       grid-column: 2; /* Explicitly place in center column */
+      max-width: 100%; /* Prevent overflow */
+      overflow: hidden; /* Hide overflow */
     }
 
     .site-title a {
       display: inline-block;
+      max-width: 100%;
     }
 
     .title-svg {
-      height: 36px;
+      height: 32px; /* Smaller on mobile */
       width: auto;
-      max-width: 180px;
+      max-width: 140px; /* Much smaller max width */
     }
     
     .header-controls {
       justify-self: end;
       gap: 0;
       grid-column: 3; /* Explicitly place in right column */
+      max-width: 100%; /* Prevent overflow */
+      overflow: hidden; /* Hide any overflow */
     }
     
     /* Hide desktop navigation on mobile */
@@ -735,13 +754,27 @@ const { base = '' } = Astro.site ? { base: import.meta.env.BASE_URL } : { base: 
     /* Show mobile controls on right */
     .mobile-controls {
       display: flex !important;
-      gap: calc(var(--grid-unit) * 1.5);
+      gap: calc(var(--grid-unit) * 0.8); /* Much smaller gap */
+      align-items: center;
+      justify-content: flex-end;
+      max-width: 100%; /* Constrain width */
+      flex-shrink: 1; /* Allow shrinking if needed */
     }
     
     .hamburger-toggle,
     .rss-toggle,
     .search-toggle {
       padding: calc(var(--grid-unit) * 0.75);
+      flex-shrink: 0; /* Prevent buttons from shrinking */
+      min-width: 44px; /* Ensure minimum touch target */
+      min-height: 44px; /* Ensure minimum touch target */
+    }
+    
+    /* Ensure GitHub button doesn't overflow */
+    .github-star-button {
+      flex-shrink: 0;
+      min-width: 44px;
+      min-height: 44px;
     }
 
     .search-container {
@@ -796,14 +829,68 @@ const { base = '' } = Astro.site ? { base: import.meta.env.BASE_URL } : { base: 
   
   @media (max-width: 480px) {
     /* Even smaller mobile adjustments */
+    .header-content {
+      grid-template-columns: 40px 1fr 140px; /* Even more restrictive */
+      gap: calc(var(--grid-unit) * 0.8); /* Reduce overall gap */
+      padding: 0 calc(var(--grid-unit) * 1.5); /* Reduce padding */
+    }
+    
     .mobile-controls {
-      gap: calc(var(--grid-unit)) !important;
+      gap: calc(var(--grid-unit) * 0.5) !important; /* Very tight spacing */
     }
     
     .github-star-button,
     .rss-toggle,
     .search-toggle {
       padding: calc(var(--grid-unit) * 0.5);
+      min-width: 40px; /* Slightly smaller but still accessible */
+      min-height: 40px;
+    }
+    
+    .title-svg {
+      max-width: 150px; /* Reduce logo size on very small screens */
     }
   }
+  
+  @media (max-width: 360px) {
+    /* Extra small screens */
+    .header-content {
+      grid-template-columns: 36px 1fr 120px; /* Fixed widths */
+      gap: calc(var(--grid-unit) * 0.5);
+      padding: 0 calc(var(--grid-unit));
+    }
+    
+    .mobile-controls {
+      gap: calc(var(--grid-unit) * 0.3) !important; /* Minimal spacing */
+    }
+    
+    .github-star-button,
+    .rss-toggle,
+    .search-toggle {
+      padding: calc(var(--grid-unit) * 0.4);
+      min-width: 36px;
+      min-height: 36px;
+    }
+    
+    .title-svg {
+      max-width: 120px;
+    }
+  }
+  .resume-icon-button {
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  padding: calc(var(--grid-unit) / 2);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resume-icon-button:hover,
+.resume-icon-button:focus {
+  color: var(--color-accent);
+  outline: none;
+}
 </style>
