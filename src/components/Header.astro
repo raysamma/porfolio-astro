@@ -2,7 +2,7 @@
 import { config } from '../config';
 import ThemeToggle from './ThemeToggle.astro';
 
-const { base = '' } = Astro.site ? { base: import.meta.env.BASE_URL } : { base: '' };
+const base = import.meta.env.BASE_URL;
 ---
 
 <header class="site-header">
