@@ -10,23 +10,46 @@ export interface Props {
 
 import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
 
+// 1. TEACHING MOMENT: Define the base path for GitHub Pages
+const base = import.meta.env.BASE_URL || '';
+const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
+
 const {
   title = SITE_TITLE,
   description = SITE_DESCRIPTION,
-  image = '/og-image.png',
+  image = '/og-image.png', // Default image in public/ folder
   type = 'website',
   publishedTime,
   canonical,
 } = Astro.props;
 
 const pageTitle = title === SITE_TITLE ? title : `${title} | ${SITE_TITLE}`;
+
+/** * FIX: Canonical URLs must include the full site domain and base path.
+ * We use the Astro.url.pathname which already includes the base path if configured correctly.
+ */
 const canonicalURL = canonical || new URL(Astro.url.pathname, Astro.site);
-const imageURL = new URL(image, Astro.site);
+
+/**
+ * FIX: Robust Image Path joining.
+ * 1. Ensure the image prop has a leading slash.
+ * 2. Prepend the base path ONLY if it's not already there.
+ */
+const formattedImage = image.startsWith('/') ? image : `/${image}`;
+const pathWithBase = formattedImage.startsWith(cleanBase) 
+  ? formattedImage 
+  : `${cleanBase}${formattedImage}`;
+
+/**
+ * Social platforms require absolute URLs (https://...).
+ * This combines your 'site' from astro.config.mjs with the calculated path.
+ */
+const imageURL = new URL(pathWithBase, Astro.site);
 ---
 
 <title>{pageTitle}</title>
 <meta name="description" content={description} />
-<meta name="author" content="Your Name" />
+<meta name="author" content="Chirayu Khalwa" />
 
 <link rel="canonical" href={canonicalURL} />
 
@@ -46,5 +69,6 @@ const imageURL = new URL(image, Astro.site);
 <meta name="robots" content="index, follow" />
 <meta name="googlebot" content="index, follow" />
 
-<link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
-<link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+<!-- 3. FIX: Add the base path to RSS and Sitemap links -->
+<link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={`${cleanBase}/rss.xml`} />
+<link rel="sitemap" type="application/xml" href={`${cleanBase}/sitemap-index.xml`} />

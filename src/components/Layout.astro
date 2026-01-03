@@ -30,6 +30,8 @@ export interface Props {
 }
 
 const { title, description, showSidebar = true, image, type, publishedTime, canonical } = Astro.props;
+const base = import.meta.env.BASE_URL || '';
+const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
 ---
 
 <!DOCTYPE html>
@@ -40,7 +42,7 @@ const { title, description, showSidebar = true, image, type, publishedTime, cano
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <script is:inline src="/theme-init.js"></script>
+    <script is:inline src={`${cleanBase}/theme-init.js`}></script>
     <SEO
       title={title}
       description={description}

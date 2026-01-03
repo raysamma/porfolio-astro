@@ -19,7 +19,7 @@ const pageDescription = `Learn more about ${author.name}, a software developer a
     <div class="author-section fade-in-stagger">
       <div class="author-avatar">
         {author.avatar ? (
-          <img src={author.avatar} alt={author.name} />
+         <img src={`${import.meta.env.BASE_URL}${author.avatar}`} alt={author.name} />
         ) : (
           <div class="avatar-placeholder">
             <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">

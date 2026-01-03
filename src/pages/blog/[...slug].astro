@@ -1,75 +1,52 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../../components/Layout.astro';
-import TableOfContents from '../../components/TableOfContents.astro';
-import { extractHeadings, filterHeadingsForTOC } from '../../utils/table-of-contents';
-import { calculateReadingTime, extractTextFromMarkdown } from '../../utils/reading-time';
+
+// 1. Get the base path for GitHub Pages
+const base = import.meta.env.BASE_URL;
+const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
 
 export async function getStaticPaths() {
-  // Support both .md and .mdx files
-  const mdPostsGlob = import.meta.glob('../../content/blog/*.md', { eager: true });
-  const mdxPostsGlob = import.meta.glob('../../content/blog/*.mdx', { eager: true });
-  
-  const allPosts = [...Object.values(mdPostsGlob), ...Object.values(mdxPostsGlob)] as any[];
-  
-  return allPosts.map((post: any) => {
-    const rawContent = post.body || post.rawContent?.() || '';
-    const plainText = extractTextFromMarkdown(rawContent);
-    const readingTime = calculateReadingTime(plainText);
-    const allHeadings = extractHeadings(rawContent);
-    const tocHeadings = filterHeadingsForTOC(allHeadings);
-    
-    // THE FIX IS THIS LINE:
-    return {
-      params: { slug: post.frontmatter.slug },
-      props: { post, readingTime, tocHeadings }
-    };
-  });
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
 }
 
+const post = Astro.props;
+const { Content } = await post.render();
 
-const { post, readingTime, tocHeadings } = Astro.props;
-const { frontmatter, Content } = post as any;
+// --- NEW LOGIC: Determine Back Link ---
+// Check if the post is a project based on tags or categories (case-insensitive)
+const isProject = 
+  post.data.tags?.some(tag => ['project', 'portfolio'].includes(tag.toLowerCase())) ||
+  post.data.categories?.some(cat => ['project', 'portfolio'].includes(cat.toLowerCase()));
 
-;
-
-
-const pageTitle = frontmatter.title;
-const base = import.meta.env.BASE_URL;
-const publishedTime = frontmatter.date ? new Date(frontmatter.date).toISOString() : undefined;
-
-// --- ADD THIS NEW LOGIC ---
-const isProject = frontmatter.tags?.includes('project') || frontmatter.tags?.includes('portfolio');
-const backLink = isProject ? `${base}projects` : `${base}blog`;
+// Set the link and text based on the type
+const backLink = isProject ? `${cleanBase}/projects` : `${cleanBase}/blog`;
 const backText = isProject ? '← Back to Projects' : '← Back to Blog';
-// --- END OF NEW LOGIC ---
-
+// --- END NEW LOGIC ---
 ---
 
-<Layout 
-  title={pageTitle} 
-  description={frontmatter.description || frontmatter.excerpt}
-  type="article"
-  publishedTime={publishedTime}
->
+<Layout title={post.data.title} description={post.data.excerpt}>
   <article class="blog-post">
     <header class="post-header">
-      <h1 class="post-title">{frontmatter.title}</h1>
+      <h1 class="post-title">{post.data.title}</h1>
       
       <div class="post-meta">
-        <time class="post-date" datetime={frontmatter.date}>
-          {new Date(frontmatter.date).toLocaleDateString('en-US', {
+        <time class="post-date" datetime={post.data.date.toISOString()}>
+          {new Date(post.data.date).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
           })}
         </time>
         
-        <span class="post-reading-time">{readingTime}</span>
-        
-        {frontmatter.categories && frontmatter.categories.length > 0 && (
+        {post.data.categories && (
           <div class="post-categories">
-            {frontmatter.categories.map((category: string) => (
-              <a href={`${base}/categories/${category.toLowerCase()}`} class="category-tag">
+            {post.data.categories.map((category: string) => (
+              <a href={`${cleanBase}/categories/${category.toLowerCase().replace(/[\/\s]+/g, '-')}`} class="category-tag">
                 {category}
               </a>
             ))}
@@ -77,26 +54,23 @@ const backText = isProject ? '← Back to Projects' : '← Back to Blog';
         )}
       </div>
       
-      {frontmatter.excerpt && (
-        <p class="post-excerpt">{frontmatter.excerpt}</p>
+      {post.data.excerpt && (
+        <p class="post-excerpt">{post.data.excerpt}</p>
       )}
       
-      <!-- Monumental Blood Red Rule -->
-      <hr class="monumental-rule" />
+      <hr class="post-rule" />
     </header>
-
-    <TableOfContents headings={tocHeadings} />
 
     <div class="post-content">
       <Content />
     </div>
 
     <footer class="post-footer">
-      {frontmatter.tags && frontmatter.tags.length > 0 && (
+      {post.data.tags && (
         <div class="post-tags">
           <span class="tags-label">Tags:</span>
           <div class="tag-list">
-            {frontmatter.tags.map((tag: string) => (
+            {post.data.tags.map((tag: string) => (
               <span class="tag">{tag}</span>
             ))}
           </div>
@@ -104,19 +78,22 @@ const backText = isProject ? '← Back to Projects' : '← Back to Blog';
       )}
       
       <div class="post-navigation">
-        <a href={backLink} class="back-to-blog">{backText}</a>
+        <a href={backLink} class="back-link">{backText}</a>
       </div>
     </footer>
   </article>
 </Layout>
+
 <style>
   .blog-post {
     max-width: 800px;
     margin: 0 auto;
+    padding: 0 var(--content-padding);
   }
 
   .post-header {
     margin-bottom: calc(var(--grid-unit) * 6);
+    text-align: center;
   }
 
   .post-title {
@@ -125,7 +102,6 @@ const backText = isProject ? '← Back to Projects' : '← Back to Blog';
     font-weight: 900;
     color: var(--color-accent);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
     line-height: 1.1;
     margin-bottom: calc(var(--grid-unit) * 3);
   }
@@ -133,28 +109,31 @@ const backText = isProject ? '← Back to Projects' : '← Back to Blog';
   .post-meta {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: calc(var(--grid-unit) * 1.5);
     margin-bottom: calc(var(--grid-unit) * 3);
-  }
-
-  .post-date, .post-reading-time {
     font-family: var(--font-mono);
-    font-size: 0.9rem;
     color: var(--color-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .post-reading-time::before {
-    content: "•";
-    margin: 0 calc(var(--grid-unit));
-    color: var(--color-border);
+    font-size: 0.9rem;
   }
 
   .post-categories {
     display: flex;
-    flex-wrap: wrap;
     gap: calc(var(--grid-unit));
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .category-tag {
+    color: var(--color-accent);
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+  }
+  
+  .category-tag:hover {
+    text-decoration: underline;
   }
 
   .post-excerpt {
@@ -162,15 +141,16 @@ const backText = isProject ? '← Back to Projects' : '← Back to Blog';
     line-height: 1.5;
     color: var(--color-text-secondary);
     font-style: italic;
-    margin: 0;
+    margin: 0 auto;
+    max-width: 650px;
   }
 
-  .monumental-rule {
-    height: 6px;
+  .post-rule {
+    height: 4px;
     background-color: var(--color-accent);
     border: none;
-    margin: calc(var(--grid-unit) * 4) 0;
-    width: 100%;
+    width: 80px;
+    margin: calc(var(--grid-unit) * 4) auto 0;
   }
 
   .post-content {
@@ -178,120 +158,87 @@ const backText = isProject ? '← Back to Projects' : '← Back to Blog';
     line-height: 1.7;
     margin-bottom: calc(var(--grid-unit) * 6);
   }
-
-  /* --- Category Tags (Top of Post) --- */
-  .category-tag {
-    background-color: var(--color-text-primary);
-    color: var(--color-white);
-    padding: calc(var(--grid-unit) / 2) calc(var(--grid-unit));
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 3px;
-    transition: background-color 0.2s ease;
+  
+  /* Markdown Content Styles */
+  .post-content :global(h2) {
+    font-family: var(--font-heading-secondary);
+    font-size: 1.875rem;
+    color: var(--color-accent);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .post-content :global(p) {
+    margin-bottom: 1.5rem;
+  }
+  
+  .post-content :global(a) {
+    color: var(--color-accent);
+  }
+  
+  .post-content :global(img) {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 1.5rem 0;
   }
 
-  .category-tag:hover,
-  .category-tag:focus {
-    background-color: var(--color-accent);
-    text-decoration: none;
-  }
-
-  :global([data-theme="dark"]) .category-tag {
-    background-color: var(--color-border);
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-text-muted);
-  }
-
-  /* --- Footer and Plain Tags --- */
   .post-footer {
     border-top: 1px solid var(--color-border);
-    padding-top: calc(var(--grid-unit) * 3);
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--grid-unit) * 3);
+    padding-top: calc(var(--grid-unit) * 4);
+    margin-top: calc(var(--grid-unit) * 6);
   }
 
   .post-tags {
     display: flex;
-    flex-direction: column;
-    gap: calc(var(--grid-unit));
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
   }
 
   .tags-label {
-    font-family: var(--font-heading-secondary);
-    font-weight: 700;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-weight: bold;
     color: var(--color-text-primary);
   }
 
   .tag-list {
     display: flex;
     flex-wrap: wrap;
-    gap: calc(var(--grid-unit));
+    gap: 0.5rem;
   }
 
   .tag {
-    background-color: var(--color-text-primary);
-    color: var(--color-white);
-    padding: calc(var(--grid-unit) / 2) calc(var(--grid-unit));
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 3px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
   }
 
-  :global([data-theme="dark"]) .tag {
-    background-color: var(--color-border);
-    color: var(--color-text-primary);
+  .post-navigation {
+    text-align: center;
   }
-  
-  /* --- Back Button --- */
-  .back-to-blog {
+
+  .back-link {
     font-family: var(--font-heading-secondary);
     font-weight: 700;
+    color: var(--color-accent);
+    text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--color-accent);
-    padding: calc(var(--grid-unit)) calc(var(--grid-unit) * 2);
+    padding: 0.8rem 1.5rem;
     border: 2px solid var(--color-accent);
     border-radius: 4px;
-    transition: all 0.2s ease;
+    transition: all 0.2s;
     display: inline-block;
-    align-self: flex-start; /* Aligns button to the left */
   }
 
-  .back-to-blog:hover,
-  .back-to-blog:focus {
-    background-color: var(--color-accent);
+  .back-link:hover {
+    background: var(--color-accent);
     color: white;
-    text-decoration: none;
   }
 
-  /* --- Media Queries and Content Styles --- */
   @media (max-width: 768px) {
-    .post-title {
-      font-size: 2.25rem;
-    }
-    .post-meta {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .post-content {
-      font-size: 1rem;
-    }
+    .post-title { font-size: 2rem; }
   }
-
-  /* Styles for content coming from Markdown */
-  .post-content :global(h1), .post-content :global(h2), .post-content :global(h3) {
-    color: var(--color-text-primary);
-    text-transform: uppercase;
-    margin-bottom: calc(var(--grid-unit) * 3);
-  }
-  /* ... add any other global content styles back if needed ... */
-
 </style>

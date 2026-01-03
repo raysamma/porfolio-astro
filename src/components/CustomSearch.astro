@@ -1,0 +1,145 @@
+---
+const base = import.meta.env.BASE_URL || '';
+// Ensure we don't have double slashes if base is "/"
+const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
+const searchUrl = `${cleanBase}/api/search.json`;
+---
+
+<div class="custom-search">
+  <input 
+    type="text" 
+    id="search-input" 
+    placeholder="Search articles..." 
+    autocomplete="off"
+  />
+  <div id="search-results-list" class="results-dropdown"></div>
+</div>
+
+<script define:vars={{ searchUrl }}>
+  const input = document.getElementById('search-input');
+  const resultsContainer = document.getElementById('search-results-list');
+  let allPosts = [];
+  let isError = false;
+
+  // Fetch the data
+  fetch(searchUrl)
+    .then(res => {
+      if (!res.ok) throw new Error(`Search index not found (${res.status})`);
+      return res.json();
+    })
+    .then(data => {
+      allPosts = data;
+      console.log('Search loaded:', allPosts.length, 'posts');
+      if (allPosts.length > 0) {
+        console.log('First post structure:', allPosts[0]);
+      }
+    })
+    .catch(err => {
+      console.error('Search failed:', err);
+      isError = true;
+    });
+
+  // Listen for typing
+  input?.addEventListener('input', (e) => {
+    // If the data failed to load, tell the user immediately
+    if (isError) {
+      resultsContainer.innerHTML = `<div class="no-results error">Search index failed to load. Check console.</div>`;
+      return;
+    }
+
+    const query = e.target.value.toLowerCase().trim();
+    
+    if (query.length < 2) {
+      resultsContainer.innerHTML = '';
+      return;
+    }
+
+    const filtered = allPosts.filter(post => {
+      const titleMatch = post.title?.toLowerCase().includes(query);
+      const excerptMatch = post.excerpt?.toLowerCase().includes(query);
+      
+      // Check tags safely (some posts might not have tags)
+      const tagMatch = post.tags && Array.isArray(post.tags) && post.tags.some(tag => 
+        tag.toLowerCase().includes(query)
+      );
+
+      // Check categories safely
+      const catMatch = post.categories && Array.isArray(post.categories) && post.categories.some(cat => 
+        cat.toLowerCase().includes(query)
+      );
+
+      return titleMatch || excerptMatch || tagMatch || catMatch;
+    });
+
+    if (filtered.length > 0) {
+      resultsContainer.innerHTML = filtered.map(post => `
+        <a href="${post.url}" class="result-item">
+          <span class="result-title">${post.title}</span>
+          <span class="result-excerpt">${post.excerpt.substring(0, 60)}...</span>
+        </a>
+      `).join('');
+    } else {
+      resultsContainer.innerHTML = `<div class="no-results">No articles found for "${query}"</div>`;
+    }
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.custom-search')) {
+      resultsContainer.innerHTML = '';
+    }
+  });
+</script>
+
+<style>
+  .custom-search { position: relative; width: 100%; max-width: 400px; }
+  input {
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 99px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    font-size: 14px;
+  }
+  input:focus { outline: 2px solid var(--color-accent); border-color: transparent; }
+  
+  .results-dropdown {
+    position: absolute;
+    top: 120%;
+    left: 0;
+    right: 0;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  
+  .result-item {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 16px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-border);
+    transition: background 0.2s;
+  }
+  .result-item:hover { background: var(--color-background); }
+  .result-item:last-child { border-bottom: none; }
+  
+  .result-title {
+    color: var(--color-text-primary);
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .result-excerpt {
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .no-results { padding: 16px; text-align: center; color: var(--color-text-muted); font-size: 14px; }
+  .no-results.error { color: red; }
+</style>
