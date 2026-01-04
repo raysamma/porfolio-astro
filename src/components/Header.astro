@@ -7,7 +7,6 @@ const base = import.meta.env.BASE_URL;
 
 <header class="site-header">
   <div class="header-content">
-    <!-- Mobile hamburger button - far left on mobile -->
     <button class="hamburger-toggle mobile-only" id="hamburger-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path class="hamburger-line" d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -41,10 +40,8 @@ const base = import.meta.env.BASE_URL;
         </ul>
       </nav>
       
-      <!-- Mobile controls group - RSS and Search on right -->
       <div class="mobile-controls">
         <ThemeToggle />
-        
         <a href="https://github.com/raysamma" class="github-star-button" target="_blank" rel="noopener" title="Star on GitHub">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M12 2C6.477 2 2 6.463 2 11.97c0 4.404 2.865 8.14 6.839 9.458.5.092.682-.216.682-.48 0-.236-.008-.864-.013-1.695-2.782.602-3.369-1.337-3.369-1.337-.454-1.151-1.11-1.458-1.11-1.458-.908-.618.069-.606.069-.606 1.003.07 1.531 1.027 1.531 1.027.892 1.524 2.341 1.084 2.91.828.092-.643.35-1.083.636-1.332-2.22-.251-4.555-1.107-4.555-4.927 0-1.088.39-1.979 1.029-2.675-.103-.252-.446-1.266.098-2.638 0 0 .84-.268 2.75 1.022A9.607 9.607 0 0112 6.82a9.55 9.55 0 012.504.336c1.909-1.29 2.747-1.022 2.747-1.022.546 1.372.202 2.386.1 2.638.64.696 1.028 1.587 1.028 2.675 0 3.83-2.339 4.673-4.566 4.92.359.307.678.915.678 1.846 0 1.332-.012 2.407-.012 2.734 0 .267.18.577.688.48 3.97-1.32 6.833-5.054 6.833-9.458C22 6.463 17.522 2 12 2z" fill="currentColor"/>
@@ -94,9 +91,9 @@ const base = import.meta.env.BASE_URL;
 </div>
 
 <script>
+  // Define types for better TS support (avoids "any" errors)
   const base = `${import.meta.env.BASE_URL || ''}`;
   
-  // Hamburger menu functionality
   function initHamburgerMenu() {
     const hamburgerToggle = document.getElementById('hamburger-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -136,23 +133,27 @@ const base = import.meta.env.BASE_URL;
     });
   }
 
-  // Search functionality
-  let searchData = [];
-  let searchOverlay, searchInput, searchResults;
+  // --- SEARCH FIXES START HERE ---
+  // 1. Define types to fix the red errors
+  let searchData: any[] = [];
+  let searchOverlay: HTMLElement | null;
+  let searchInput: HTMLInputElement | null;
+  let searchResults: HTMLElement | null;
 
   async function initSearch() {
     try {
-      // FIX 1: Fetch from the correct API location
+      // 2. FIX URL: Point to the 'api' folder and ensure slash handling
       const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
       const response = await fetch(`${cleanBase}/api/search.json`);
-      if (!response.ok) throw new Error("API not found");
+      
+      if (!response.ok) throw new Error('Failed to fetch search data');
       searchData = await response.json();
     } catch (error) {
       console.error('Failed to load search data:', error);
     }
 
     searchOverlay = document.getElementById('search-overlay');
-    searchInput = document.getElementById('search-input');
+    searchInput = document.getElementById('search-input') as HTMLInputElement;
     searchResults = document.getElementById('search-results');
 
     document.getElementById('search-toggle')?.addEventListener('click', openSearch);
@@ -185,8 +186,8 @@ const base = import.meta.env.BASE_URL;
     if (searchResults) searchResults.innerHTML = '';
   }
 
-  function handleSearch(e) {
-    const target = e.target;
+  function handleSearch(e: Event) {
+    const target = e.target as HTMLInputElement;
     const query = target.value.toLowerCase().trim();
     
     if (query.length < 2) {
@@ -194,18 +195,18 @@ const base = import.meta.env.BASE_URL;
       return;
     }
 
-    // FIX 2: Added tag matching to fix "No article found"
-    const results = searchData.filter((post) => 
+    // 3. FIX: Add 'tags' check so you can find "anime"
+    const results = searchData.filter((post: any) => 
       post.title?.toLowerCase().includes(query) ||
       post.excerpt?.toLowerCase().includes(query) ||
-      (post.categories && post.categories.some((cat) => cat.toLowerCase().includes(query))) ||
-      (post.tags && post.tags.some((tag) => tag.toLowerCase().includes(query)))
+      (post.categories && post.categories.some((cat: string) => cat.toLowerCase().includes(query))) ||
+      (post.tags && post.tags.some((tag: string) => tag.toLowerCase().includes(query)))
     ).slice(0, 10);
 
     displayResults(results, query);
   }
 
-  function displayResults(results, query) {
+  function displayResults(results: any[], query: string) {
     if (results.length === 0) {
       if (searchResults) {
         searchResults.innerHTML = `
@@ -217,8 +218,7 @@ const base = import.meta.env.BASE_URL;
       return;
     }
 
-    // FIX 3: Do NOT add base path here because API already provides full URL
-    const resultsHTML = results.map((post) => `
+    const resultsHTML = results.map((post: any) => `
       <article class="search-result">
         <h3 class="search-result-title">
           <a href="${post.url}">${post.title}</a>
@@ -231,7 +231,7 @@ const base = import.meta.env.BASE_URL;
         ${post.excerpt ? `<p class="search-result-excerpt">${post.excerpt.substring(0, 100)}...</p>` : ''}
         ${post.categories ? `
           <div class="search-result-categories">
-            ${post.categories.map((cat) => `<span class="search-category">${cat}</span>`).join(' ')}
+            ${post.categories.map((cat: string) => `<span class="search-category">${cat}</span>`).join(' ')}
           </div>
         ` : ''}
       </article>
@@ -247,15 +247,14 @@ const base = import.meta.env.BASE_URL;
     }
   }
 
-  function init() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initHamburgerMenu();
+      initSearch();
+    });
+  } else {
     initHamburgerMenu();
     initSearch();
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
   }
 </script>
 

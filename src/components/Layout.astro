@@ -41,7 +41,7 @@ const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+   <link rel="icon" type="image/svg+xml" href={`${cleanBase}/favicon.svg`} />
     <script is:inline src={`${cleanBase}/theme-init.js`}></script>
     <SEO
       title={title}
