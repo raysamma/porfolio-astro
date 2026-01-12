@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true  # <--- FIX 1: Changed from false to true
 
 jobs:
   build:
@@ -36,8 +36,9 @@ jobs:
       - name: Build with Astro
         run: npm run build
         env:
-          SITE: https://jdrhyne.github.io
-          BASE_PATH: /volks-typo/
+          # <--- FIX 2: Updated to match your repo details
+          SITE: "https://raysamma.github.io"
+          BASE_PATH: "/porfolio-astro"
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
