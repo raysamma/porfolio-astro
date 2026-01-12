@@ -1,0 +1,104 @@
+---
+title: "Strict Types, Strict Discipline: 200 Days of LeetCode"
+slug: "strict-discipline"
+date: "2026-01-12"
+author: "Your Name"
+excerpt: "Reflections on solving 221 algorithms exclusively in Java. How verbosity became clarity."
+categories: ["Growth", "Java", "Algorithms"]
+tags: ["leetcode", "java", "backend", "consistency"]
+image: "/images/java-leetcode-journey.png"
+draft: false
+---
+
+# Strict Types, Strict Discipline: 200 Days of LeetCode ☕
+
+In early 2026, I embarked on a personal challenge: solve algorithms daily for 200 days without skipping.
+<figure style={{ margin: "2rem 0", textAlign: "center" }}>
+  <img 
+    src="/porfolio-astro/images/leetcode-graph.png" 
+    alt="GitHub Contribution Graph showing a solid block of green squares" 
+    style={{ borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)", width: "100%", maxWidth: "700px" }}
+  />
+  <figcaption style={{ fontSize: "0.9rem", color: "#666", marginTop: "0.5rem", fontStyle: "italic" }}>
+    Figure 1: Consistency made visible. 200 days of green squares.
+  </figcaption>
+</figure>
+ But there was a catch—I had to use **Java exclusively**. While many choose Python for its brevity, I wanted to master the strict typing and verbose structure that powers real-world backend systems.
+
+As a developer, this journey wasn't just about changing colors on a contribution graph; it was about **rewiring my brain**, **mastering collections**, and **finding clarity in verbosity**. Here’s how I approached it:
+
+---
+
+## 🎯 The Goal
+
+The objective wasn't just "solving" problems, but understanding the architecture of a solution. I focused on:
+
+- 🧱 **Foundations**: Mastering Arrays and Strings before touching Graphs.
+- 🧠 **Pattern Recognition**: Identifying whether a problem needs a HashMap or a Two-Pointer approach instantly.
+- ⚡ **Strict Typing**: Using Java's type system to prevent logic errors before runtime.
+- 📉 **Consistency**: Showing up every single day, regardless of motivation.
+
+---
+
+## 🛠️ The Toolkit
+
+To keep the momentum going, I standardized my environment:
+✅ **Language**: Java (OpenJDK)
+✅ **IDE**: IntelliJ / Neovim (for raw typing practice)
+✅ **Tracking**: Anki (for memorizing patterns, not code)
+✅ **Focus**: Data Structures & Algorithms (DSA)
+
+---
+
+## 🔥 Core Patterns
+
+To make the solving process efficient, I identified and mastered specific algorithmic patterns:
+
+| Pattern | Why? |
+| :--- | :--- |
+| **Two Pointers** | Reduces nested loops ($O(N^2)$) to linear time ($O(N)$). |
+| **Sliding Window** | Essential for subarray and substring problems. |
+| **HashMap** | The silver bullet for $O(1)$ lookups and frequency counting. |
+| **Recursion (DFS)** | Breaking down complex tree problems into base cases. |
+| **Dynamic Programming** | Caching results to avoid re-calculating history. |
+
+These patterns turned "impossible" problems into standard implementation tasks.
+
+---
+
+## 💻 The Code
+
+I learned that in Java, **verbosity is documentation**. Writing out types explicitly clarifies the data flow.
+
+Here is a template I developed for **Dynamic Programming (Memoization)** that helped me solve 28 hard problems:
+<img 
+  src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXNmaGZpM3B4ZTZuM3B4ZTZuM3B4ZTZuM3B4ZTZuM3B4ZTZuMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/JIX9t2j0ZTN9S/giphy.gif" 
+  alt="A funny cat GIF" 
+  width="500" 
+  style={{ borderRadius: '8px', margin: '20px auto', display: 'block' }} 
+/>
+
+```java
+// A standard pattern for caching results
+class Solution {
+    private Map<String, Integer> memo = new HashMap<>();
+
+    public int solve(int[] nums, int index) {
+        // 1. Base Case
+        if (index >= nums.length) return 0;
+        
+        // 2. Check Cache
+        String key = index + "";
+        if (memo.containsKey(key)) return memo.get(key);
+        
+        // 3. Logic & Recurrence
+        int result = Math.max(
+            nums[index] + solve(nums, index + 2), 
+            solve(nums, index + 1)
+        );
+        
+        // 4. Store & Return
+        memo.put(key, result);
+        return result;
+    }
+}
